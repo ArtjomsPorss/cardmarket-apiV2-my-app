@@ -1,8 +1,12 @@
 package parsers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
+import app.security.UserCredentialsLoader;
 import entities.AccountWrapper;
 import entities.ArticleWrapper;
 import entities.ExpansionWrapper;
@@ -15,9 +19,9 @@ import entities.SingleWrapper;
 import entities.UserWrapper;
 import entities.UsersWrapper;
 
-public class CardmarketAPIv2_0 {
+public class CardmarketParserAPIv2_0 {
     
-    
+    private static final Logger logger = LogManager.getLogger(CardmarketParserAPIv2_0.class);
     
     /**
      * GET - Returns the account details of the authenticated user Authentication -
@@ -92,7 +96,9 @@ public class CardmarketAPIv2_0 {
     
     
     /**
+     * Find products by specfied name or part of it. Search by part of name requires more parameters
      * Find Products:
+     * https://www.mkmapi.eu/ws/documentation/API_2.0:Find_Products
      *  Allowed HTTP Methods
      *  GET - Searches for products by a given search string
      * Resource Information:
@@ -167,6 +173,8 @@ public class CardmarketAPIv2_0 {
     
     
     /**
+     * Find all Articles for specified product id.
+     * 
      * ARTICLES:
      * 	Allowed HTTP Methods:
      * 		GET - Returns all available articles for a specified product. You can specify parameters for start and maximum results returned. If the response would have more than 1.000 entities a Temporary Redirect is returned. You can specify several filter parameters.

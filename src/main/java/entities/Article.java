@@ -34,7 +34,7 @@ public class Article {
     private Boolean inShoppingCart;
     @SerializedName("seller")
     @Expose
-    private Seller seller;
+    private User seller;
     @SerializedName("condition")
     @Expose
     private String condition;
@@ -110,11 +110,11 @@ public class Article {
         this.inShoppingCart = inShoppingCart;
     }
 
-    public Seller getSeller() {
+    public User getSeller() {
         return seller;
     }
 
-    public void setSeller(Seller seller) {
+    public void setSeller(User seller) {
         this.seller = seller;
     }
 

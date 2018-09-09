@@ -14,7 +14,7 @@ public class Address {
     private String name;
     @SerializedName("extra")
     @Expose
-    private Object extra;
+    private String extra;
     @SerializedName("street")
     @Expose
     private String street;
@@ -36,11 +36,11 @@ public class Address {
         this.name = name;
     }
 
-    public Object getExtra() {
+    public String getExtra() {
         return extra;
     }
 
-    public void setExtra(Object extra) {
+    public void setExtra(String extra) {
         this.extra = extra;
     }
 

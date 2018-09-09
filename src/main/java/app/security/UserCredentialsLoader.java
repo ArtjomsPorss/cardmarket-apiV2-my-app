@@ -7,10 +7,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.gson.Gson;
 
-public class CredentialsLoader {
-    public static Credentials loadCredentials() throws IOException {
+public class UserCredentialsLoader {
+    
+    public static UserCredentials loadCredentials() throws IOException {
+        
+        
 
         /*
         Load credentials from file. Form them in the file as JSON such as:
@@ -24,14 +30,21 @@ public class CredentialsLoader {
         */
         // path to JSON
         Path path = Paths.get("C:\\cardmarketCredentials_sandbox.txt");
+
         if (!Files.isReadable(path)) {
-            throw new CredentialsLoadException(
-                    "Failed to load Cardmarket Credentials. File specified is readable. Check if it is a folder.");
+            throw new UserCredentialsLoadException(
+                    "Failed to load Cardmarket UserCredentials. File specified is NOT readable. Check if it is a folder.");
         }
+        // read from path
         List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
 
+        // create java object from what is read
         Gson gson = new Gson();
-        return gson.fromJson(String.join("", lines), Credentials.class);
+        UserCredentials credentials =  gson.fromJson(String.join("", lines), UserCredentials.class);
+        
+        credentials.verifyCredentialsPresentWithException();
+        
+        return credentials;
     }
 
 }

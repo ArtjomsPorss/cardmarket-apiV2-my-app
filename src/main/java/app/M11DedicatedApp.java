@@ -18,13 +18,20 @@ import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.google.common.net.UrlEscapers;
 
-import app.security.Credentials;
-import app.security.CredentialsLoader;
-import parsers.CardmarketAPIv2_0;
+import app.database.CardMarketDAO;
+import app.security.UserCredentials;
+import app.security.UserCredentialsLoader;
+import entities.ArticleWrapper;
+import parsers.CardmarketParserAPIv2_0;
 
 public class M11DedicatedApp {
+    
+    private static final Logger logger = LogManager.getLogger(M11DedicatedApp.class);
 
     private String _mkmAppToken;
     private String _mkmAppSecret;
@@ -44,7 +51,7 @@ public class M11DedicatedApp {
      * @param accessToken
      * @param accessSecret
      */
-    public M11DedicatedApp(Credentials credentials) {
+    public M11DedicatedApp(UserCredentials credentials) {
         _mkmAppToken = credentials.getMkmAppToken();
         _mkmAppSecret = credentials.getMkmAppSecret();
         _mkmAccessToken = credentials.getMkmAccessToken();
@@ -231,7 +238,7 @@ public class M11DedicatedApp {
     public static void main(String[] args) throws IOException {
         // USAGE EXAMPLE
 
-        Credentials credentials = CredentialsLoader.loadCredentials();
+        UserCredentials credentials = UserCredentialsLoader.loadCredentials();
 
         M11DedicatedApp app = new M11DedicatedApp(credentials);
 
@@ -303,64 +310,72 @@ public class M11DedicatedApp {
          */
         /*
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/account")) {
-            System.out.println(CardmarketAPIv2_0.processAccount(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processAccount(app.responseContent()));
         }
 
         
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/games")) {    
-            System.out.println(CardmarketAPIv2_0.processGames(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processGames(app.responseContent()));
         }
 
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/games/1/expansions")) {
-            System.out.println(CardmarketAPIv2_0.processExpansions(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processExpansions(app.responseContent()));
         }
 
 
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/2110/singles")) {
-            System.out.println(CardmarketAPIv2_0.processExpansionSingles(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processExpansionSingles(app.responseContent()));
         }
         
 
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/361996")) {
-            System.out.println(CardmarketAPIv2_0.processProduct(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processProduct(app.responseContent()));
         }
         
         String cardName = encode("Wandering Ones");
-        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search="+cardName)) {
-            System.out.println(CardmarketAPIv2_0.processFindProducts(app.responseContent()));
+        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search="+cardName)) { // more parameters for partial search
+//            if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search=12238")) { // 204 No COntent
+            System.out.println(CardmarketParserAPIv2_0.processFindProducts(app.responseContent()));
         }
-                
+         */    
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/12238")) {
-            System.out.println(CardmarketAPIv2_0.processFindArticles(app.responseContent()));
+            ArticleWrapper wrapper = CardmarketParserAPIv2_0.processFindArticles(app.responseContent());
+            System.out.println(wrapper);
+            CardMarketDAO dao = new CardMarketDAO();
+            dao.createArticles(wrapper);
         }
-        
+        /*
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/metaproducts/7203")) {
-            System.out.println(CardmarketAPIv2_0.processMetaproducts(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processMetaproducts(app.responseContent()));
         }
         
         String urlParam = encode("Wandering Ones");
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/metaproducts/find?search="+urlParam)) {
-            System.out.println(CardmarketAPIv2_0.processFindMetaproducts(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processFindMetaproducts(app.responseContent()));
         }
         
-        String user = "PlayerSpot";
+        
+        OffsetDateTime offsDT = OffsetDateTime.parse("2009-10-20T21:29:18+0200", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxx"));
+//        String user = "PlayerSpot";
 //        String user = "51816";
+        String user = "b30dd6b036e87746495b04be1de97149";
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/"+user)) {
-            System.out.println(CardmarketAPIv2_0.processUsers(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processUsers(app.responseContent()));
         }
         
         
-//        String user = "Player";
-//        String user = "51816";
+        String user = "Player";
+        String user = "51816";
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/find?search="+user)) {
-            System.out.println(CardmarketAPIv2_0.processFindUsers(app.responseContent()));
+            System.out.println(CardmarketParserAPIv2_0.processFindUsers(app.responseContent()));
         }
-        */
         
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/b30dd6b036e87746495b04be1de97149/articles?idGame=1&start=0&maxResults=2")) {
-            System.out.println(CardmarketAPIv2_0.processUserArticles(app.responseContent()));
+            if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/b30dd6b036e87746495b04be1de97149/articles?idGame=1&maxResults=2")) {
+            System.out.println(CardmarketParserAPIv2_0.processUserArticles(app.responseContent()));
         }
         
+         */
         
     }
 
