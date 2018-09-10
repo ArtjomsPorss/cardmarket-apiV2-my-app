@@ -24,10 +24,10 @@ public class DatabaseCredentialsLoader {
             "user" : "kebab",
             "password" : "abrakadabra",
         }
-        
         */
+        
         // path to JSON with credentials in it
-        Path path = Paths.get("C:\\cardmarketCredentialsDb.txt");
+        Path path = Paths.get("C:\\cardmarketCredentialsDbConnect.txt");
 
         if (!Files.isReadable(path)) {
             throw new DbCredentialsLoadException(

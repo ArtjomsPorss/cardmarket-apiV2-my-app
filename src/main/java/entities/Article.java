@@ -1,5 +1,6 @@
 package entities;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -10,6 +11,28 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Article {
+    
+    public Article() {}
+
+    public Article(Integer idArticle, Integer idProduct, Language language, String comments, BigDecimal price,
+            Integer count, Boolean inShoppingCart, User seller, String condition, Boolean isFoil, Boolean isSigned,
+            Boolean isPlayset, Boolean isAltered, List<Link> links) {
+        super();
+        this.idArticle = idArticle;
+        this.idProduct = idProduct;
+        this.language = language;
+        this.comments = comments;
+        this.price = price;
+        this.count = count;
+        this.inShoppingCart = inShoppingCart;
+        this.seller = seller;
+        this.condition = condition;
+        this.isFoil = isFoil;
+        this.isSigned = isSigned;
+        this.isPlayset = isPlayset;
+        this.isAltered = isAltered;
+        this.links = links;
+    }
 
     @SerializedName("idArticle")
     @Expose
@@ -25,7 +48,7 @@ public class Article {
     private String comments;
     @SerializedName("price")
     @Expose
-    private Double price;
+    private BigDecimal price;
     @SerializedName("count")
     @Expose
     private Integer count;
@@ -86,11 +109,11 @@ public class Article {
         this.comments = comments;
     }
 
-    public Double getPrice() {
+    public BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(BigDecimal price) {
         this.price = price;
     }
 

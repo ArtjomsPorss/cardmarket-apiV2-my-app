@@ -37,8 +37,13 @@ public class DatabaseConnector {
         return DriverManager.getConnection(credentials.getDbPath(), credentials.getUser(), credentials.getPassword());
     }
     
-    public static JdbcTemplate getJdbcTemplate() throws IOException {
-        loadCredentials();        
+    public static JdbcTemplate getJdbcTemplate() {
+        try {
+            loadCredentials();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }        
         
         JdbcDataSource dataSource = new JdbcDataSource();
         dataSource.setURL(credentials.getDbPath());
@@ -48,5 +53,4 @@ public class DatabaseConnector {
         
         return new JdbcTemplate(dataSource);
     }
-    
 }

@@ -70,6 +70,14 @@ public class User {
     @Expose
     private Boolean onVacation;
 
+    public User() {
+    }
+
+    public User(Integer idUser) {
+        super();
+        this.idUser = idUser;
+    }
+
     public Integer getIdUser() {
         return idUser;
     }

@@ -23,9 +23,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.google.common.net.UrlEscapers;
 
-import app.database.CardMarketDAO;
+import app.dao.ArticlesDAO;
 import app.security.UserCredentials;
 import app.security.UserCredentialsLoader;
+import app.service.ArticlesService;
+import entities.Article;
 import entities.ArticleWrapper;
 import parsers.CardmarketParserAPIv2_0;
 
@@ -338,12 +340,16 @@ public class M11DedicatedApp {
             System.out.println(CardmarketParserAPIv2_0.processFindProducts(app.responseContent()));
         }
          */    
-        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/12238")) {
-            ArticleWrapper wrapper = CardmarketParserAPIv2_0.processFindArticles(app.responseContent());
-            System.out.println(wrapper);
-            CardMarketDAO dao = new CardMarketDAO();
-            dao.createArticles(wrapper);
-        }
+//        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/12238")) {
+//            ArticleWrapper wrapper = CardmarketParserAPIv2_0.processFindArticles(app.responseContent());
+//            System.out.println(wrapper);
+//            ArticlesDAO dao = new ArticlesDAO();
+//            dao.insertArticles(wrapper);
+//        }
+        
+        Article article = new ArticlesService().getArticle(444418);
+        System.out.println(article);
+        
         /*
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/metaproducts/7203")) {
             System.out.println(CardmarketParserAPIv2_0.processMetaproducts(app.responseContent()));

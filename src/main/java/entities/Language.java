@@ -15,6 +15,13 @@ public class Language {
     @SerializedName("languageName")
     @Expose
     private String languageName;
+    
+    public Language() {}
+
+    public Language(Integer idLanguage) {
+        super();
+        this.idLanguage = idLanguage;
+    }
 
     public Integer getIdLanguage() {
         return idLanguage;
