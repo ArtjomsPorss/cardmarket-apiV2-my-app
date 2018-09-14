@@ -18,27 +18,9 @@ public class ArticlesDAO {
     public Article getArticle(Integer idArticle) {
         String sql = "select * from tdcm_articles where art_id_article = ?;";
         
-        Article article = template.query(sql, new Object[] {idArticle}, r -> {
-                Article temp = new Article(
-                      r.getInt("ART_ID_ARTICLE")
-                    , r.getInt("ART_ID_PRODUCT")
-                    , new Language(r.getInt("ART_ID_LANGUAGE"))
-                    , r.getString("ART_COMMENTS")
-                    , r.getBigDecimal("ART_PRICE")
-                    , r.getInt("ART_COUNT")
-                    , r.getBoolean("ART_IN_SHOPPING_CART")
-                    , new User(r.getInt("ART_ID_USER"))
-                    , r.getString("ART_CONDITION")
-                    , r.getBoolean("ART_IS_FOIL")
-                    , r.getBoolean("ART_IS_SIGNED")
-                    , r.getBoolean("ART_IS_PLAYSET")
-                    , r.getBoolean("ART_IS_ALTERED")
-                    , null);
-                return temp;
-            }
-        );
+        List<Article> articles = template.query(sql, new Object[] {idArticle}, new ArticlesRowMapper());
         
-        return article;
+        return null != articles && !articles.isEmpty() ? articles.get(0) : null;
     }
     
     
