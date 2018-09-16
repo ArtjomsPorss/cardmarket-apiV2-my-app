@@ -8,8 +8,6 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import app.database.DatabaseConnector;
 import entities.Article;
 import entities.ArticleWrapper;
-import entities.Language;
-import entities.User;
 
 public class ArticlesDAO {
     
@@ -20,7 +18,7 @@ public class ArticlesDAO {
         
         List<Article> articles = template.query(sql, new Object[] {idArticle}, new ArticlesRowMapper());
         
-        return null != articles && !articles.isEmpty() ? articles.get(0) : null;
+        return null != articles && !articles.isEmpty() ? articles.get(0) : new Article();
     }
     
     

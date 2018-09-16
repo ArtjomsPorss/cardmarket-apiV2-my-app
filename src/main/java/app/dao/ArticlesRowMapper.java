@@ -9,9 +9,8 @@ import entities.Article;
 import entities.Language;
 import entities.User;
 
-public class ArticlesRowMapper implements RowMapper {
+public class ArticlesRowMapper implements RowMapper<Article> {
 
-    @Override
     public Article mapRow(ResultSet rs, int rowNum) throws SQLException {
         Article temp = new Article(
                 rs.getInt("ART_ID_ARTICLE")

@@ -1,5 +1,7 @@
 package entities;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -38,6 +40,8 @@ public class Expansion {
     @SerializedName("links")
     @Expose
     private List<Link> links = null;
+    
+    public Expansion() {}
 
     public int getIdExpansion() {
         return idExpansion;
@@ -110,6 +114,14 @@ public class Expansion {
     public void setLinks(List<Link> links) {
         this.links = links;
     }
+    
+    public OffsetDateTime getReleaseDateAsOffsetDateTime() {
+        return OffsetDateTime.parse(this.getReleaseDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxx"));
+    }
+
+    public void setReleaseDateFromOffsetDateTime(OffsetDateTime timestamp) {
+        this.setReleaseDate(timestamp.format(DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxx")));
+    }
 
     @Override
     public String toString() {
@@ -139,5 +151,4 @@ public class Expansion {
                 .append(links, rhs.links).append(abbreviation, rhs.abbreviation).append(idExpansion, rhs.idExpansion)
                 .isEquals();
     }
-
 }
