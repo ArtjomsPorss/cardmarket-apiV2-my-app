@@ -146,9 +146,10 @@ public class Expansion {
             return false;
         }
         Expansion rhs = ((Expansion) other);
-        return new EqualsBuilder().append(idGame, rhs.idGame).append(isReleased, rhs.isReleased).append(icon, rhs.icon)
-                .append(enName, rhs.enName).append(releaseDate, rhs.releaseDate).append(localization, rhs.localization)
-                .append(links, rhs.links).append(abbreviation, rhs.abbreviation).append(idExpansion, rhs.idExpansion)
+        return new EqualsBuilder().append(idGame, rhs.idGame).append(isReleased, rhs.isReleased)
+                .append(enName, rhs.enName).append(releaseDate, rhs.releaseDate)
+                .append(abbreviation, rhs.abbreviation).append(idExpansion, rhs.idExpansion)
                 .isEquals();
     }
+    
 }

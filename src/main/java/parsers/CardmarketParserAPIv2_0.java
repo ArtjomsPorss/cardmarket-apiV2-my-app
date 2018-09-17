@@ -21,7 +21,7 @@ import entities.UsersWrapper;
 
 public class CardmarketParserAPIv2_0 {
     
-    private static final Logger logger = LogManager.getLogger(CardmarketParserAPIv2_0.class);
+    private static final Logger LOGGER = LogManager.getLogger(CardmarketParserAPIv2_0.class);
     
     /**
      * GET - Returns the account details of the authenticated user Authentication -
@@ -65,8 +65,13 @@ public class CardmarketParserAPIv2_0 {
      */
     public static ExpansionWrapper processExpansions(String responseContent) throws JsonParseException {
         Gson gson = new Gson();
-        ExpansionWrapper expansions = gson.fromJson(responseContent, ExpansionWrapper.class);
-        return expansions;
+        ExpansionWrapper expansionsWrapper = gson.fromJson(responseContent, ExpansionWrapper.class);
+        
+        if(null == expansionsWrapper || null == expansionsWrapper.getExpansion() || expansionsWrapper.getExpansion().isEmpty()) {
+            LOGGER.warn("No expansions received from the web");
+        }
+        
+        return expansionsWrapper;
        
     }
     

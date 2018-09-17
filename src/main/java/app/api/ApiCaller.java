@@ -27,7 +27,7 @@ import app.security.UserCredentials;
 
 public class ApiCaller {
     
-    private static final Logger logger = LogManager.getLogger(CMDedicatedApp.class);
+    private static final Logger LOGGER = LogManager.getLogger(CMDedicatedApp.class);
 
     private String _mkmAppToken;
     private String _mkmAppSecret;

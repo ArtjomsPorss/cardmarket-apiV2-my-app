@@ -41,7 +41,6 @@ public class DatabaseConnector {
         try {
             loadCredentials();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }        
         
