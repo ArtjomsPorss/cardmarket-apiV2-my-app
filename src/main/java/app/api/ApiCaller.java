@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.stream.Collectors;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -71,16 +72,16 @@ public class ApiCaller {
         return URLEncoder.encode(str, "UTF-8");
     }
 
-    public static String encode(String str) {
-        return UrlEscapers.urlFragmentEscaper().escape(str);
+    public static String urlFragmentEncode(String str) {
+        return UrlEscapers.urlFragmentEscaper().escape(str).replaceAll(":", "%3A");
+    }
+    
+    public static String urlParameterEncode(String str) {
+        return UrlEscapers.urlFormParameterEscaper().escape(str);
     }
 
     private void _debug(String msg) {
-        if (_debug) {
-            System.out.print(GregorianCalendar.getInstance().getTime());
-            System.out.print(" > ");
-            System.out.println(msg);
-        }
+        LOGGER.debug(msg);
     }
 
     /**
@@ -141,7 +142,8 @@ public class ApiCaller {
             StringJoiner parametersJoined = new StringJoiner("&");
             parameters.stream().forEach(parametersJoined::add);
                                 
-            baseString = baseString + rawurlencode(parametersJoined.toString()) ;
+            baseString = baseString + rawurlencode(parametersJoined.toString()).replace("+", "%20");
+            LOGGER.debug(baseString);
             
             String signingKey = rawurlencode(_mkmAppSecret) + 
                         "&" +
@@ -165,6 +167,10 @@ public class ApiCaller {
                     "oauth_signature=\"" + oauth_signature + "\"" ;
             
             HttpURLConnection connection = (HttpURLConnection) new URL(requestURL).openConnection();
+//            HttpURLConnection connection = (HttpURLConnection) new URL(urlFragmentEncode(requestURL)).openConnection();
+//            HttpURLConnection connection = (HttpURLConnection) new URL(urlParameterEncode(requestURL)).openConnection();
+//            HttpURLConnection connection = (HttpURLConnection) new URL(rawurlencode(requestURL)).openConnection();
+//            HttpURLConnection connection = (HttpURLConnection) new URL(realm + "?" +  urlFragmentEncode(urlParameters)).openConnection();
             connection.addRequestProperty("Authorization", authorizationProperty) ;
             connection.connect() ;
             

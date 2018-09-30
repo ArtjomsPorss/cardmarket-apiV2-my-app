@@ -2,35 +2,11 @@ package app;
 
 import java.io.IOException;
 
-import app.api.ApiCaller;
-import app.security.UserCredentials;
-import app.security.UserCredentialsLoader;
-import app.service.ExpansionsService;
-import entities.ExpansionWrapper;
-import parsers.CardmarketParserAPIv2_0;
+import app.service.CardmarketService;
 
 public class CMDedicatedApp {
     
-    private ApiCaller api;
-    
-    private ExpansionsService expansionsService;
-    
-
-
-    /**
-     * Constructor. Fill parameters according to given MKM profile app parameters.
-     * 
-     * @param appToken
-     * @param appSecret
-     * @param accessToken
-     * @param accessSecret
-     */
-    public CMDedicatedApp(UserCredentials credentials) {
-        
-        this.api = new ApiCaller(credentials);
-        this.expansionsService = new ExpansionsService();
-    }
-
+    public CardmarketService cmService = new CardmarketService();
 
     /**
      * @param args
@@ -38,16 +14,23 @@ public class CMDedicatedApp {
      */
     public static void main(String[] args) throws IOException {
         // USAGE EXAMPLE
-
-        UserCredentials credentials = UserCredentialsLoader.loadCredentials();
-
-        CMDedicatedApp app = new CMDedicatedApp(credentials);
+        CMDedicatedApp cmApp = new CMDedicatedApp();
         
-        app.updateExpansions();
-
-//        app.setDebug(true);
+//        cmApp.cmService.updateExpansions();
+//        cmApp.cmService.updateExpansionSingles(38);
+        cmApp.cmService.updateAllExpansionSingles();
         
 
+        
+
+//        app.findProducts("Springleaf");                                           // fine
+//        app.findProducts("Springleaf Drum");                                           // fine
+//        app.findProducts("Springleaf Drum&exact=true&idGame=1&idLanguage=1");                                           // fine
+//        app.findProducts("Griselbrand");                                           // fine
+//        app.findProducts("John Avon Art: Farway Island Playmat");                  // 400 bad request
+//        app.findProducts("John%20Avon%20Art%3A%20Farway%20Island%20Playmat");    // 204 without url encode
+//        app.findProducts("Raven Playmat");                                       // 400 bad request - request structure is wrong
+//        app.findProducts("Raven%20Playmat");                                       // 204 no content
         /*
          * API V2.0 REQUESTS
          * =============================================================================
@@ -55,40 +38,31 @@ public class CMDedicatedApp {
          */
         /*
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/account")) {
-            System.out.println(CardmarketParserAPIv2_0.processAccount(app.responseContent()));
+            System.out.println(ApiParserV2_0.processAccount(app.responseContent()));
         }
 
         
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/games")) {    
-            System.out.println(CardmarketParserAPIv2_0.processGames(app.responseContent()));
+            System.out.println(ApiParserV2_0.processGames(app.responseContent()));
         }
          */
-        
-
-        
-
 
         /*
-        
-        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/2110/singles")) {
-            System.out.println(CardmarketParserAPIv2_0.processExpansionSingles(app.responseContent()));
-        }
-        
 
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/361996")) {
-            System.out.println(CardmarketParserAPIv2_0.processProduct(app.responseContent()));
+            System.out.println(ApiParserV2_0.processProduct(app.responseContent()));
         }
         
         String cardName = encode("Wandering Ones");
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search="+cardName)) { // more parameters for partial search
 //            if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search=12238")) { // 204 No COntent
-            System.out.println(CardmarketParserAPIv2_0.processFindProducts(app.responseContent()));
+            System.out.println(ApiParserV2_0.processFindProducts(app.responseContent()));
         }
         
         
          */    
 //        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/12238")) {
-//            ArticleWrapper wrapper = CardmarketParserAPIv2_0.processFindArticles(app.responseContent());
+//            ArticleWrapper wrapper = ApiParserV2_0.processFindArticles(app.responseContent());
 //            System.out.println(wrapper);
 //            ArticlesDAO dao = new ArticlesDAO();
 //            dao.insertArticles(wrapper);
@@ -100,13 +74,10 @@ public class CMDedicatedApp {
         
         /*
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/metaproducts/7203")) {
-            System.out.println(CardmarketParserAPIv2_0.processMetaproducts(app.responseContent()));
+            System.out.println(ApiParserV2_0.processMetaproducts(app.responseContent()));
         }
         
-        String urlParam = encode("Wandering Ones");
-        if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/metaproducts/find?search="+urlParam)) {
-            System.out.println(CardmarketParserAPIv2_0.processFindMetaproducts(app.responseContent()));
-        }
+
         
         
         OffsetDateTime offsDT = OffsetDateTime.parse("2009-10-20T21:29:18+0200", DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssxx"));
@@ -114,33 +85,42 @@ public class CMDedicatedApp {
 //        String user = "51816";
         String user = "b30dd6b036e87746495b04be1de97149";
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/"+user)) {
-            System.out.println(CardmarketParserAPIv2_0.processUsers(app.responseContent()));
+            System.out.println(ApiParserV2_0.processUsers(app.responseContent()));
         }
         
         
         String user = "Player";
         String user = "51816";
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/find?search="+user)) {
-            System.out.println(CardmarketParserAPIv2_0.processFindUsers(app.responseContent()));
+            System.out.println(ApiParserV2_0.processFindUsers(app.responseContent()));
         }
         
         if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/b30dd6b036e87746495b04be1de97149/articles?idGame=1&start=0&maxResults=2")) {
             if (app.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/users/b30dd6b036e87746495b04be1de97149/articles?idGame=1&maxResults=2")) {
-            System.out.println(CardmarketParserAPIv2_0.processUserArticles(app.responseContent()));
+            System.out.println(ApiParserV2_0.processUserArticles(app.responseContent()));
         }
         
          */
         
     }
 
-    private void updateExpansions() {
-        
-        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/games/1/expansions")) {
-            ExpansionWrapper expansionsWrapper = CardmarketParserAPIv2_0.processExpansions(api.responseContent());
-            expansionsService.insertExpansionsIfNotPresent(expansionsWrapper);
-        }
-    }
 
+    
+
+    /**
+     * pretty much useless as authorisation doesn't work on this call.
+     * The other way is to get all singles, store in db and query db instead.
+     * @param productName
+     */
+//    private void findProducts(String productName) {
+//        //check database if product is there
+//            //if not, search for product in shop, insert into db
+////        productName = ApiCaller.encode(productName);
+//        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/products/find?search="+productName)) {
+//            System.out.println(ApiParserV2_0.processFindProducts(api.responseContent()));
+//        }
+//    }
+    
 
 
     

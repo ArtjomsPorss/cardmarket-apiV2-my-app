@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import entities.Expansion;
 
-public class ExpansionRowMapper implements RowMapper<Expansion> {
+public class ExpansionsRowMapper implements RowMapper<Expansion> {
 
     public Expansion mapRow(ResultSet rs, int rowNum) throws SQLException {
         Expansion temp = new Expansion(); 

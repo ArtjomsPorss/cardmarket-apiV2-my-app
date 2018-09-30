@@ -1,5 +1,6 @@
 package app.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +16,18 @@ public class ExpansionsService {
     private static final Logger LOGGER = LogManager.getLogger(ExpansionsService.class);
     
     private ExpansionsDAO dao = new ExpansionsDAO();
+    
+    /**
+     * Inserts all expansions from the wrapper to DB
+     * @param wrapper
+     * @throws IOException
+     */
+    public void insertExpansions(ExpansionWrapper wrapper) throws IOException {
+        List<Expansion> expansions = wrapper.getExpansion();
+        for (Expansion expansion : expansions) {
+            insertExpansion(expansion);
+        }
+    }
     
     /**
      * Inserts new expansions if not present in DB. If present but different, updates existing expansion.
@@ -55,5 +68,21 @@ public class ExpansionsService {
     private void insertExpansion(Expansion expansion) {
         dao.insertExpansion(expansion);        
     }
+    
+    /**
+     * TODO
+     * @param expansionId
+     * @return
+     */
+    public Expansion getExpansion(Integer expansionId) {
+        return null;
+    }
 
+    /**
+     * TODO
+     * @return
+     */
+    public List<Expansion> getAllExpansions(){
+        return dao.getAllExpansions();
+    }
 }

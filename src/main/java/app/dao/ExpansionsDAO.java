@@ -6,15 +6,11 @@ import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.jdbc.core.JdbcTemplate;
 
-import app.CMDedicatedApp;
-import app.database.DatabaseConnector;
 import entities.Expansion;
 import entities.ExpansionWrapper;
 
-public class ExpansionsDAO {
-    JdbcTemplate template = DatabaseConnector.getJdbcTemplate();
+public class ExpansionsDAO extends BaseDAO {
     
     private static final Logger LOGGER = LogManager.getLogger(ExpansionsDAO.class);
     /**
@@ -26,7 +22,7 @@ public class ExpansionsDAO {
         LOGGER.debug(String.format("Getting an expansion from DB with id[%d]", idExpansion));
         
         String sql = "select * from TSCM_EXPANSIONS where EXP_ID_EXPANSION = ?;";
-        List<Expansion> expansions = template.query(sql, new Object[] {idExpansion}, new ExpansionRowMapper());
+        List<Expansion> expansions = template.query(sql, new Object[] {idExpansion}, new ExpansionsRowMapper());
         return null != expansions && !expansions.isEmpty() ? Optional.ofNullable(expansions.get(0)) : Optional.ofNullable(null);
     }
     
@@ -37,23 +33,11 @@ public class ExpansionsDAO {
     public List<Expansion> getAllExpansions() {
         LOGGER.debug("Getting all expansions from DB");
         String sql = "select * from TSCM_EXPANSIONS;";
-        List<Expansion> expansions = template.query(sql, new ExpansionRowMapper());
+        List<Expansion> expansions = template.query(sql, new ExpansionsRowMapper());
         return expansions;
     }
     
     
-    /**
-     * Inserts all expansions from the wrapper to DB
-     * @param wrapper
-     * @throws IOException
-     */
-    public void insertExpansions(ExpansionWrapper wrapper) throws IOException {
-        List<Expansion> expansions = wrapper.getExpansion();
-        for (Expansion expansion : expansions) {
-            insertExpansion(expansion);
-        }
-    }
-
     
     /**
      * Inserts expansion in to DB

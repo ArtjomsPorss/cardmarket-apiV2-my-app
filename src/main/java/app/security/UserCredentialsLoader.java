@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -14,7 +15,7 @@ import com.google.gson.Gson;
 
 public class UserCredentialsLoader {
     
-    public static UserCredentials loadCredentials() throws IOException {
+    public static UserCredentials loadCredentials() {
         
         
 
@@ -36,7 +37,13 @@ public class UserCredentialsLoader {
                     "Failed to load Cardmarket UserCredentials. File specified is NOT readable. Check if it is a folder.");
         }
         // read from path
-        List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        List<String> lines = new ArrayList<String>();
+        try {
+            lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         // create java object from what is read
         Gson gson = new Gson();

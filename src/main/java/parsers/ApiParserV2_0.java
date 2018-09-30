@@ -19,9 +19,9 @@ import entities.SingleWrapper;
 import entities.UserWrapper;
 import entities.UsersWrapper;
 
-public class CardmarketParserAPIv2_0 {
+public class ApiParserV2_0 {
     
-    private static final Logger LOGGER = LogManager.getLogger(CardmarketParserAPIv2_0.class);
+    private static final Logger LOGGER = LogManager.getLogger(ApiParserV2_0.class);
     
     /**
      * GET - Returns the account details of the authenticated user Authentication -
@@ -321,8 +321,8 @@ public class CardmarketParserAPIv2_0 {
      */
     public static MetaproductsWrapper processFindMetaproducts(String responseContent) {
         Gson gson = new Gson();
-        MetaproductsWrapper article = gson.fromJson(responseContent, MetaproductsWrapper.class);
-        return article;
+        MetaproductsWrapper metaproduct = gson.fromJson(responseContent, MetaproductsWrapper.class);
+        return metaproduct;
     }
     
     

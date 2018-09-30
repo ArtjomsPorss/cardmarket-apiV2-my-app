@@ -3,15 +3,10 @@ package app.dao;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import app.database.DatabaseConnector;
 import entities.Article;
 import entities.ArticleWrapper;
 
-public class ArticlesDAO {
-    
-    JdbcTemplate template = DatabaseConnector.getJdbcTemplate();
+public class ArticlesDAO extends BaseDAO {
     
     public Article getArticle(Integer idArticle) {
         String sql = "select * from tdcm_articles where art_id_article = ?;";
