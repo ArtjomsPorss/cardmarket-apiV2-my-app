@@ -1,5 +1,6 @@
 package app.dao;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,6 @@ public class SinglesDAO extends BaseDAO {
     
     public void insertSingle(Single single) {
         LOGGER.debug(String.format("Inserting an single into DB [%s]", single));
-        
         String query = "insert into TSCM_SINGLES (SGL_ID_PRODUCT, SGL_ID_METAPRODUCT, SGL_REPRINT_AMT, SGL_EN_NAME, SGL_LOC_NAME, SGL_ID_GAME, SGL_EXP_NAME, SGL_RARITY, SGL_IMAGE) VALUES(?,?,?,?,?,?,?,?,?);";
         template.update(query,
                 single.getIdProduct(),
@@ -25,7 +25,7 @@ public class SinglesDAO extends BaseDAO {
                 single.getIdGame(),
                 single.getExpansionName(),
                 single.getRarity(),
-                single.getImage());        
+                single.getImage());  
     }
     
     /**
@@ -42,6 +42,12 @@ public class SinglesDAO extends BaseDAO {
     }
     
     public void updateSingleById(Single single) {
-        
+        //TODO
+    }
+    
+    public List<Single> getAllSinglesForExpansion(String expansion) {
+        String sql = "select * from TSCM_SINGLES where SGL_EXP_NAME = ?;";
+        List<Single> singles = template.query(sql, new Object[] {expansion}, new SingleRowMapper());
+        return singles;
     }
 }

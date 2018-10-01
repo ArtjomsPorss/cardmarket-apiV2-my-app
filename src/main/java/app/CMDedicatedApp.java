@@ -18,7 +18,8 @@ public class CMDedicatedApp {
         
 //        cmApp.cmService.updateExpansions();
 //        cmApp.cmService.updateExpansionSingles(38);
-        cmApp.cmService.updateAllExpansionSingles();
+        
+        cmApp.cmService.updateAllExpansionSinglesByCount();
         
 
         

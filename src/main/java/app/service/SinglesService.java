@@ -26,7 +26,7 @@ public class SinglesService {
      * 4. If single is not returned, inserts a new Single into DB. 
      * @param singlesWrapper
      */
-    public void insertSingleIfNotPresent(SingleWrapper singlesWrapper) {
+    public void insertSinglesIfNotPresent(SingleWrapper singlesWrapper) {
         List<Single> singles = singlesWrapper.getSingle();        
         for (Single single : singles) {
             Optional<Single> fromDb = getSingleByProductId(single.getIdProduct());
@@ -35,6 +35,18 @@ public class SinglesService {
             } else {
                 insertSingle(single);
             }
+        }
+    }
+    
+    public void insertSinglesIfCountNotPresent(SingleWrapper singlesWrapper) {
+        List<Single> dbExpansionSingles = getSinglesByExpansion(singlesWrapper.getExpansion().getEnName());
+        List<Single> singles = singlesWrapper.getSingle(); 
+        
+        // if amount of singles from API and from DB match, don't insert/update 
+        if(dbExpansionSingles != null && singles != null && dbExpansionSingles.size() == singles.size()) {
+            return;
+        } else {
+            insertSinglesIfNotPresent(singlesWrapper);
         }
     }
     
@@ -49,6 +61,10 @@ public class SinglesService {
      */
     public void updateSingleSingleById(Single single) {
         dao.updateSingleById(single);
+    }
+    
+    public List<Single> getSinglesByExpansion(String expansion) {
+        return dao.getAllSinglesForExpansion(expansion);
     }
     
 }

@@ -22,14 +22,6 @@ public class CardmarketService {
         this.api.setDebug(true);
     }
     
-    // TODO update expansions and singles
-    // find new expansions --> send to DB
-    // for each expansion in DB --> get all singles from API
-    // if single doesn't exist - insert it.
-    public void updateExpansionsAndSingles() {
-        //TODO
-    }
-    
     /**
      * Update database with changes in existing expansions or insert new expansions if not present.
      */
@@ -48,6 +40,16 @@ public class CardmarketService {
     }
     
     /**
+     * less precise, checks count of singles per expansion in db, and if doesn't match - starts updating from there
+     */
+    public void updateAllExpansionSinglesByCount() {
+        List<Expansion> expansions = expansionsService.getAllExpansions();
+        for (Expansion expansion : expansions) {
+            updateExpansionSinglesByCount(expansion.getIdExpansion());
+        }
+    }
+    
+    /**
      * Update database of singles.
      * Dependency: uses expansions from database.
      * @param expansion
@@ -55,15 +57,20 @@ public class CardmarketService {
     public void updateExpansionSingles(Integer expansion) {
         if (api.request(String.format("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/%d/singles", expansion))) {
             SingleWrapper singlesWrapper = ApiParserV2_0.processExpansionSingles(api.responseContent()); 
-//            System.out.println(singlesWrapper);
-            singlesService.insertSingleIfNotPresent(singlesWrapper);
+            singlesService.insertSinglesIfNotPresent(singlesWrapper);
         }
     }
     
-    
-    public void updateSingles() {
-        
+    /**
+     * Update database of singles if number of singles per expansion from API and from DB doesn't match.
+     * Dependency: uses expansions from database.
+     * @param expansion
+     */
+    public void updateExpansionSinglesByCount(Integer expansion) {
+        if (api.request(String.format("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/%d/singles", expansion))) {
+            SingleWrapper singlesWrapper = ApiParserV2_0.processExpansionSingles(api.responseContent()); 
+            singlesService.insertSinglesIfCountNotPresent(singlesWrapper);
+        }
     }
-    
 
 }

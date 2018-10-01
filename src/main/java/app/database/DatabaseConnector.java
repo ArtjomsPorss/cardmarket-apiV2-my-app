@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import org.h2.jdbcx.JdbcDataSource;
+//import javax.sql.DataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import app.database.security.DatabaseCredentials;
@@ -45,11 +46,10 @@ public class DatabaseConnector {
         }        
         
         JdbcDataSource dataSource = new JdbcDataSource();
+//        DataSource dataSource = new DataSource();
         dataSource.setURL(credentials.getDbPath());
         dataSource.setUser(credentials.getUser());
         dataSource.setPassword(credentials.getPassword());
-        
-        
         return new JdbcTemplate(dataSource);
     }
 }

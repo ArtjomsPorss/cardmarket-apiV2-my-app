@@ -5,5 +5,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import app.database.DatabaseConnector;
 
 public class BaseDAO {
-    protected JdbcTemplate template = DatabaseConnector.getJdbcTemplate();
+    protected static JdbcTemplate template;
+    
+    public BaseDAO() {
+        if(template == null) {
+            template = DatabaseConnector.getJdbcTemplate();
+        }
+    }
 }

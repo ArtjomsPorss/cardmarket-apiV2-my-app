@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
-import app.security.UserCredentialsLoader;
 import entities.AccountWrapper;
 import entities.ArticleWrapper;
 import entities.ExpansionWrapper;
