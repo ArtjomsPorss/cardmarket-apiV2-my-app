@@ -1,20 +1,35 @@
 package app.service;
+import app.service.CardTextFileService;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import app.api.ApiCaller;
 import app.security.UserCredentials;
 import app.security.UserCredentialsLoader;
 import entities.Expansion;
 import entities.ExpansionWrapper;
+import entities.Single;
 import entities.SingleWrapper;
 import parsers.ApiParserV2_0;
-
+/**
+ * Service that wires all other services together into an integrated app.
+ * TODO use spring and add front-end framework such as angular that will use REST APIs
+ * @author artjoms.porss
+ *
+ */
 public class CardmarketService {
+    
+    private static final Logger LOGGER = LogManager.getLogger(CardmarketService.class);
     
     private ApiCaller api;
     private ExpansionsService expansionsService = new ExpansionsService();
     private SinglesService singlesService = new SinglesService();
+    private CardTextFileService cardTxtFileService = new CardTextFileService();
+    private CommandLineService cmd = new CommandLineService();
     
     public CardmarketService()  {
         UserCredentials credentials = UserCredentialsLoader.loadCredentials();
@@ -70,6 +85,20 @@ public class CardmarketService {
         if (api.request(String.format("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/%d/singles", expansion))) {
             SingleWrapper singlesWrapper = ApiParserV2_0.processExpansionSingles(api.responseContent()); 
             singlesService.insertSinglesIfCountNotPresent(singlesWrapper);
+        }
+    }
+    
+    public void findSinglesByNames() {
+        List<String> cardNames = cardTxtFileService.loadCardsFromTextFile();
+        if(null == cardNames || cardNames.isEmpty()) {
+            LOGGER.info("The list of cards trying to find in DB is empty!!!");
+            return;
+        }
+        for (String cardName : cardNames) {
+            List<Single> singles = singlesService.getSingleByProductName(cardName);
+            cmd.printCardsWithExpansions(
+                    cardName
+                    , singles.stream().map(s -> s.getExpansionName()).collect(Collectors.toList()));;
         }
     }
 

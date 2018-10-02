@@ -16,8 +16,6 @@ import com.google.gson.Gson;
 public class UserCredentialsLoader {
     
     public static UserCredentials loadCredentials() {
-        
-        
 
         /*
         Load credentials from file. Form them in the file as JSON such as:
@@ -41,7 +39,6 @@ public class UserCredentialsLoader {
         try {
             lines = Files.readAllLines(path, StandardCharsets.UTF_8);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 

@@ -79,7 +79,7 @@ public class ExpansionsService {
     }
 
     /**
-     * TODO
+     * Returns a list of all expansions
      * @return
      */
     public List<Expansion> getAllExpansions(){

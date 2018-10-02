@@ -49,8 +49,12 @@ public class SinglesService {
             insertSinglesIfNotPresent(singlesWrapper);
         }
     }
-    
-    //TODO get single by ID
+
+    /**
+     * Returns single from DAO using product ID
+     * @param productId
+     * @return
+     */
     public Optional<Single> getSingleByProductId(Integer productId) {
         return dao.getSingle(productId);
     }
@@ -60,11 +64,15 @@ public class SinglesService {
      * @param single
      */
     public void updateSingleSingleById(Single single) {
-        dao.updateSingleById(single);
+        dao.updateSinglesByProductId(single);
     }
     
     public List<Single> getSinglesByExpansion(String expansion) {
         return dao.getAllSinglesForExpansion(expansion);
+    }
+
+    public List<Single> getSingleByProductName(String cardName) {
+        return dao.getSinglesForName(cardName);
     }
     
 }
