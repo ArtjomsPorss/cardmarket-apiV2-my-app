@@ -16,16 +16,15 @@ public class CMDedicatedApp {
         // USAGE EXAMPLE
         CMDedicatedApp cmApp = new CMDedicatedApp();
         
-        cmApp.cmService.updateExpansions();
+//        cmApp.cmService.updateExpansions();
 //        cmApp.cmService.updateExpansionSingles(38);
         
 //        cmApp.cmService.updateAllExpansionSinglesByCount();
         
-        //TODO load up a list of cards
-        //TODO search for them in DB
-        //TODO if returns nothing - show warning 
-        //TODO if returns something - display expansions beside the list
 //        cmApp.cmService.findSinglesByNames();
+        
+        
+        cmApp.cmService.findArticlesForSingleNames();        
         
 
         

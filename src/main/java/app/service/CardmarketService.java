@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import app.api.ApiCaller;
 import app.security.UserCredentials;
 import app.security.UserCredentialsLoader;
+import entities.ArticleWrapper;
 import entities.Expansion;
 import entities.ExpansionWrapper;
 import entities.Single;
@@ -30,6 +31,7 @@ public class CardmarketService {
     private SinglesService singlesService = new SinglesService();
     private CardTextFileService cardTxtFileService = new CardTextFileService();
     private CommandLineService cmd = new CommandLineService();
+    private ArticlesService articlesService = new ArticlesService(); 
     
     public CardmarketService()  {
         UserCredentials credentials = UserCredentialsLoader.loadCredentials();
@@ -88,6 +90,18 @@ public class CardmarketService {
         }
     }
     
+    
+    /**
+     * Get articles for product Id and update/store them in database
+     * @param productId
+     */
+    public void getArticlesForProduct(Integer productId) {
+        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/"+productId.toString())) {
+            ArticleWrapper wrapper = ApiParserV2_0.processFindArticles(api.responseContent());
+            articlesService.insertArticles(wrapper);
+        }
+    }
+    
     public void findSinglesByNames() {
         List<String> cardNames = cardTxtFileService.loadCardsFromTextFile();
         if(null == cardNames || cardNames.isEmpty()) {
@@ -100,6 +114,25 @@ public class CardmarketService {
                     cardName
                     , singles.stream().map(s -> s.getExpansionName()).collect(Collectors.toList()));;
         }
+    }
+
+    public void findArticlesForSingleNames() {
+        List<String> cardNames = cardTxtFileService.loadCardsFromTextFile();
+        if(null == cardNames || cardNames.isEmpty()) {
+            LOGGER.info("The list of cards trying to find in DB is empty!!!");
+            return;
+        }
+        for (String cardName : cardNames) {
+            List<Single> singles = singlesService.getSingleByProductName(cardName);
+            //TODO: for each product(expansion) of a card, search for articles and store them in articles table
+            for (Single single : singles) {
+                if (null == single.getExpansionName() || single.getExpansionName().isEmpty()) {
+                    continue;
+                } else {
+                    getArticlesForProduct(single.getIdProduct());
+                }
+            }
+        }        
     }
 
 }

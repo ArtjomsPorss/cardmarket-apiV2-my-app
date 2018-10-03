@@ -3,6 +3,8 @@ package app.dao;
 import java.io.IOException;
 import java.util.List;
 
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
+
 import entities.Article;
 import entities.ArticleWrapper;
 
@@ -18,12 +20,12 @@ public class ArticlesDAO extends BaseDAO {
     
     
     public void insertArticles(ArticleWrapper wrapper) throws IOException {
-        List<Article> articles = wrapper.getArticle();
-        
+        wrapper.getArticle().forEach(a -> insertArticle(a));
+    }
+
+
+    public void insertArticle(Article article) {
         String query = "insert into tdcm_articles(ART_ID_ARTICLE, ART_ID_PRODUCT, ART_ID_LANGUAGE, ART_COMMENTS, ART_PRICE, ART_COUNT, ART_IN_SHOPPING_CART, ART_ID_USER, ART_CONDITION, ART_IS_FOIL, ART_IS_SIGNED, ART_IS_PLAYSET, ART_IS_ALTERED) values(?,?,?,?,?,?,?,?,?,?,?,?,?);";
-        
-        for (Article article : articles) {
-            template.update(query, article.getIdArticle(), article.getIdProduct(), article.getLanguage().getIdLanguage(), article.getComments(), article.getPrice(), article.getCount(), article.getInShoppingCart(), article.getSeller().getIdUser(), article.getCondition(), article.getIsFoil(), article.getIsSigned(), article.getIsPlayset(), article.getIsAltered());
-        }
+        template.update(query, article.getIdArticle(), article.getIdProduct(), article.getLanguage().getIdLanguage(), article.getComments(), article.getPrice(), article.getCount(), article.getInShoppingCart(), article.getSeller().getIdUser(), article.getCondition(), article.getIsFoil(), article.getIsSigned(), article.getIsPlayset(), article.getIsAltered());
     }
 }
