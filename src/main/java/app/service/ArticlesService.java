@@ -29,7 +29,7 @@ public class ArticlesService {
         return dao.getArticle(idArticle);
     }
 
-    public void insertArticles(ArticleWrapper wrapper) {
+    public void insertArticlesIfNotPresent(ArticleWrapper wrapper) {
         wrapper.getArticle().forEach(a -> insertArticleIfNotPresent(a));
     }
 }

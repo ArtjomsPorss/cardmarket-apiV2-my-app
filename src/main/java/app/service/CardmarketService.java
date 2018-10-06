@@ -8,6 +8,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import app.api.ApiCaller;
+import app.api.ApiService;
 import app.security.UserCredentials;
 import app.security.UserCredentialsLoader;
 import entities.ArticleWrapper;
@@ -26,35 +27,42 @@ public class CardmarketService {
     
     private static final Logger LOGGER = LogManager.getLogger(CardmarketService.class);
     
-    private ApiCaller api;
+    private ApiService apiService = new ApiService();
     private ExpansionsService expansionsService = new ExpansionsService();
     private SinglesService singlesService = new SinglesService();
     private CardTextFileService cardTxtFileService = new CardTextFileService();
     private CommandLineService cmd = new CommandLineService();
     private ArticlesService articlesService = new ArticlesService(); 
     
-    public CardmarketService()  {
-        UserCredentials credentials = UserCredentialsLoader.loadCredentials();
-        this.api = new ApiCaller(credentials);
-        this.api.setDebug(true);
-    }
+    public CardmarketService() {}
     
     /**
      * Update database with changes in existing expansions or insert new expansions if not present.
      */
     public void updateExpansions() {
-        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/games/1/expansions")) {
-            ExpansionWrapper expansionsWrapper = ApiParserV2_0.processExpansions(api.responseContent());
-            expansionsService.insertExpansionsIfNotPresent(expansionsWrapper);
-        }        
+        ExpansionWrapper expansionsWrapper = apiService.getAllExpansions();
+        expansionsService.insertExpansionsIfNotPresent(expansionsWrapper);
     }
     
+    @Deprecated
     public void updateAllExpansionSingles() {
         List<Expansion> expansions = expansionsService.getAllExpansions();
         for (Expansion expansion : expansions) {
             updateExpansionSingles(expansion.getIdExpansion());
         }
     }
+    
+    /**
+     * Update database of singles.
+     * Dependency: uses expansions from database.
+     * @param expansion
+     */
+    @Deprecated
+    public void updateExpansionSingles(Integer expansion) {
+        SingleWrapper singlesWrapper = apiService.getSinglesForExpansion(expansion); 
+        singlesService.insertSinglesIfNotPresent(singlesWrapper);
+    }
+    
     
     /**
      * less precise, checks count of singles per expansion in db, and if doesn't match - starts updating from there
@@ -67,39 +75,23 @@ public class CardmarketService {
     }
     
     /**
-     * Update database of singles.
-     * Dependency: uses expansions from database.
-     * @param expansion
-     */
-    public void updateExpansionSingles(Integer expansion) {
-        if (api.request(String.format("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/%d/singles", expansion))) {
-            SingleWrapper singlesWrapper = ApiParserV2_0.processExpansionSingles(api.responseContent()); 
-            singlesService.insertSinglesIfNotPresent(singlesWrapper);
-        }
-    }
-    
-    /**
-     * Update database of singles if number of singles per expansion from API and from DB doesn't match.
+     * Get singles from API for provided expansion and update/store them database.
      * Dependency: uses expansions from database.
      * @param expansion
      */
     public void updateExpansionSinglesByCount(Integer expansion) {
-        if (api.request(String.format("https://sandbox.cardmarket.com/ws/v2.0/output.json/expansions/%d/singles", expansion))) {
-            SingleWrapper singlesWrapper = ApiParserV2_0.processExpansionSingles(api.responseContent()); 
-            singlesService.insertSinglesIfCountNotPresent(singlesWrapper);
-        }
+        SingleWrapper singlesWrapper = apiService.getSinglesForExpansion(expansion); 
+        singlesService.insertSinglesIfCountNotPresent(singlesWrapper);
     }
     
     
     /**
-     * Get articles for product Id and update/store them in database
+     * Get articles for product Id and update/store them in database.
      * @param productId
      */
     public void getArticlesForProduct(Integer productId) {
-        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/"+productId.toString())) {
-            ArticleWrapper wrapper = ApiParserV2_0.processFindArticles(api.responseContent());
-            articlesService.insertArticles(wrapper);
-        }
+        ArticleWrapper wrapper = apiService.getArticlesForProduct(productId);
+        articlesService.insertArticlesIfNotPresent(wrapper);
     }
     
     public void findSinglesByNames() {
@@ -117,12 +109,12 @@ public class CardmarketService {
     }
 
     public void findArticlesForSingleNames() {
-        List<String> cardNames = cardTxtFileService.loadCardsFromTextFile();
-        if(null == cardNames || cardNames.isEmpty()) {
+        List<String> cardNamesFromTxtFile = CardTextFileService.loadCardsFromTextFile();
+        if(null == cardNamesFromTxtFile || cardNamesFromTxtFile.isEmpty()) {
             LOGGER.info("The list of cards trying to find in DB is empty!!!");
             return;
         }
-        for (String cardName : cardNames) {
+        for (String cardName : cardNamesFromTxtFile) {
             List<Single> singles = singlesService.getSingleByProductName(cardName);
             //TODO: for each product(expansion) of a card, search for articles and store them in articles table
             for (Single single : singles) {

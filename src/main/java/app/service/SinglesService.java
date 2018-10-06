@@ -38,6 +38,12 @@ public class SinglesService {
         }
     }
     
+    /**
+     * Checks the singles in provided expansion against database by count.
+     * If count is different - uses insertSinglesIfNotPresent to store singles.
+     * Faster than insertSinglesIfNotPresent if making an update over existing singles in DB.
+     * @param singlesWrapper
+     */
     public void insertSinglesIfCountNotPresent(SingleWrapper singlesWrapper) {
         List<Single> dbExpansionSingles = getSinglesByExpansion(singlesWrapper.getExpansion().getEnName());
         List<Single> singles = singlesWrapper.getSingle(); 
