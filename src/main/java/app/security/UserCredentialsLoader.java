@@ -28,6 +28,7 @@ public class UserCredentialsLoader {
         
         */
         // path to JSON
+//        Path path = Paths.get("C:\\cardmarketCredentials_sandbox.txt");
         Path path = Paths.get("C:\\cardmarketCredentials_sandbox.txt");
 
         if (!Files.isReadable(path)) {

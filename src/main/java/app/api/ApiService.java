@@ -18,6 +18,11 @@ public class ApiService {
     //TODO: runtime exceptions thrown in this class are candidates for an Aspect
     
     private ApiCaller api;
+    
+    //TODO: apply switch from sandbox to real urls, don't forget about credentials
+    public static boolean isSandbox = true;    
+    private static String SANDBOX_URL = "https://sandbox.cardmarket.com/ws/v2.0/output.json/";
+    private static String REAL_URL = "https://api.cardmarket.com/ws/v1.1/";
 
     public ApiService() {
         UserCredentials credentials = UserCredentialsLoader.loadCredentials();
@@ -55,7 +60,7 @@ public class ApiService {
      * @param productId
      */
     public ArticleWrapper getArticlesForProduct(Integer productId) {
-        if (api.request("https://sandbox.cardmarket.com/ws/v2.0/output.json/articles/" + productId.toString())) {
+        if (api.request("https://sandbox.cardmarket.com/ws/v1.1/output.json/articles/" + productId.toString())) {
             return ApiParserV2_0.processFindArticles(api.responseContent());
         } else {
             throw new RuntimeException("getArticlesForProduct: failed!");

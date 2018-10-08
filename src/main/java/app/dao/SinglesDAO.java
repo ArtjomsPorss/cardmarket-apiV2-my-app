@@ -1,6 +1,7 @@
 package app.dao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -64,6 +65,7 @@ public class SinglesDAO extends BaseDAO {
     public List<Single> getSinglesForName(String cardName) {
         String sql = "select * from TSCM_SINGLES where SGL_EN_NAME = ?;";
         List<Single> singles = template.query(sql, new Object[] {cardName}, new SingleRowMapper());
-        return singles;
+        
+        return null == singles ? new ArrayList<Single>() : singles;
     }
 }

@@ -7,12 +7,13 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 //TODO when there will be UI, this will be triggered and list of cards will be passed from it
 public class CardTextFileService {
+    
     public static List<String> loadCardsFromTextFile() {
-
         /*
         Load cards from file, each card separated by newline e.g.
             Springleaf Drum

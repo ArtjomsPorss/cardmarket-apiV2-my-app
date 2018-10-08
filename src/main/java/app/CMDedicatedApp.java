@@ -18,13 +18,80 @@ public class CMDedicatedApp {
         
 //        cmApp.cmService.updateExpansions();
 //        cmApp.cmService.updateExpansionSingles(38);
-        
 //        cmApp.cmService.updateAllExpansionSinglesByCount();
-        
 //        cmApp.cmService.findSinglesByNames();
         
+//        cmApp.cmService.getArticlesForProduct(294758);//fails Fatal Push - Aether Revolt
+//        cmApp.cmService.getArticlesForProduct(297910);//success Fatal Push - Friday Night Magic Promos
+//        cmApp.cmService.getArticlesForProduct(14901);//success - other card
+        cmApp.cmService.findArticlesForSingleNames(); 
         
-        cmApp.cmService.findArticlesForSingleNames();        
+        
+//        String matcher = "\\d+ (?=\\w)";
+//        String matcher = "\\d+ (?=\\w)";
+//        String matcher = "^ *[0-9]++ ([a-zA-Z0-9'\"., ]+) *$";
+        // ^ start of line
+        //  * indicates there may be zero or more spaces
+        // ([0-9]++) one or more numbers
+        // space indicates there must be a space between amount and card name
+        // [a-zA-Z0-9'\"., ]+ one or more of these characters
+        //  *$ zero or more spaces and end of line
+//        Pattern MY_PATTERN = Pattern.compile(matcher);
+//        Matcher m = MY_PATTERN.matcher("1 Springleaf");
+//        Matcher m = MY_PATTERN.matcher("10 Springleaf");
+//        Matcher m = MY_PATTERN.matcher(" 10 Springleaf");
+//        Matcher m = MY_PATTERN.matcher(" Springleaf 10 Yes");
+//        Matcher m = MY_PATTERN.matcher("Springleaf 10 Yes 10 ");
+//        Matcher m = MY_PATTERN.matcher("10 Springleaf 11 ");
+//        Matcher m = MY_PATTERN.matcher("10 Springleaf11 ");
+//        while (m.find()) {
+//            System.out.println(m.group(1));
+//             s now contains "BAR"
+//        }
+        
+//        System.out.println("1 ".matches(matcher));
+//        System.out.println("12 Kongming, \"Sleeping Dragon\"".matches(matcher));
+//        System.out.println("1 Aboshan's Desire".matches(matcher));
+//        System.out.println("1 Springleaf".matches(matcher));
+//        System.out.println("1 Springleaf ".matches(matcher));
+//        System.out.println(" 1 Springleaf".matches(matcher));
+//        System.out.println("10 Springleaf".matches(matcher));
+//        System.out.println(" 10 Springleaf".matches(matcher));
+//        System.out.println("10 Springleaf Drum".matches(matcher));
+//        System.out.println("10 Springleaf Drum ".matches(matcher));
+//        System.out.println("10 Springleaf Drum 11".matches(matcher));
+//        System.out.println("10 Springleaf Drum 11 ".matches(matcher));
+//        System.out.println("Springleaf 1".matches(matcher));
+//        System.out.println("Springleaf 1 ".matches(matcher));
+//        System.out.println("Springleaf 10 ".matches(matcher));
+//        System.out.println("Springleaf 10 Yes".matches(matcher));
+//        System.out.println(" Springleaf 10 Yes".matches(matcher));
+//        System.out.println("Springleaf 10 Yes ".matches(matcher));
+//        System.out.println("Springleaf 10 Yes 10 ".matches(matcher));
+//        System.out.println("Springleaf 10 Yes 10".matches(matcher));
+
+        
+//        System.out.println(cmApp.cmService.extractCardName("1 "));
+//        System.out.println(cmApp.cmService.extractCardName("12 Kongming, \"Sleeping Dragon\""));
+//        System.out.println(cmApp.cmService.extractCardName("1 Aboshan's Desire"));
+//        System.out.println(cmApp.cmService.extractCardName("1 Springleaf"));
+//        System.out.println(cmApp.cmService.extractCardName("1 Springleaf "));
+//        System.out.println(cmApp.cmService.extractCardName(" 1 Springleaf"));
+//        System.out.println(cmApp.cmService.extractCardName("10 Springleaf"));
+//        System.out.println(cmApp.cmService.extractCardName(" 10 Springleaf"));
+//        System.out.println(cmApp.cmService.extractCardName("10 Springleaf Drum"));
+//        System.out.println(cmApp.cmService.extractCardName("10 Springleaf Drum "));
+//        System.out.println(cmApp.cmService.extractCardName("10 Springleaf Drum 11"));
+//        System.out.println(cmApp.cmService.extractCardName("10 Springleaf Drum 11 "));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 1"));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 1 "));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 10 "));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 10 Yes"));
+//        System.out.println(cmApp.cmService.extractCardName(" Springleaf 10 Yes"));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 10 Yes "));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 10 Yes 10 "));
+//        System.out.println(cmApp.cmService.extractCardName("Springleaf 10 Yes 10"));
+        
         
 
         

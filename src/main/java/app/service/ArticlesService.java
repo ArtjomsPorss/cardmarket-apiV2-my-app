@@ -32,4 +32,12 @@ public class ArticlesService {
     public void insertArticlesIfNotPresent(ArticleWrapper wrapper) {
         wrapper.getArticle().forEach(a -> insertArticleIfNotPresent(a));
     }
+    
+    public void insertArticles(ArticleWrapper wrapper) {
+        wrapper.getArticle().forEach(a -> insertArticle(a));
+    }
+    
+    public void insertBatchArticles(ArticleWrapper wrapper) {
+        dao.insertBatchArticles(wrapper.getArticle());
+    }
 }
